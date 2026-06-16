@@ -42,9 +42,9 @@ export function ReelsFeed({ posts, onUploadOpen }: ReelsFeedProps) {
   const likedLookup = useMemo(() => new Set(likedPostIds), [likedPostIds]);
 
   return (
-    <div ref={containerRef} className="hide-scrollbar flex-1 snap-y snap-mandatory overflow-y-auto bg-[var(--surface-strong)]">
+    <div ref={containerRef} className="hide-scrollbar min-h-0 flex-1 snap-y snap-mandatory overflow-y-auto bg-[var(--surface-strong)]">
       {posts.map((post) => (
-        <div key={post.id} data-post-id={post.id} className="snap-start">
+        <div key={post.id} data-post-id={post.id} className="h-full snap-start">
           <ReelCard
             post={post}
             isActive={activePostId === post.id}

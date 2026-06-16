@@ -38,7 +38,7 @@ export function ReelCard({ post, isActive, isLiked, onToggleLike, onUploadOpen }
   }, [muted]);
 
   return (
-    <article className="relative flex h-[calc(100dvh-10.6rem)] min-h-[34rem] overflow-hidden bg-black text-white md:h-[43rem]">
+    <article className="relative flex h-full min-h-full overflow-hidden bg-black text-white">
       <video
         ref={videoRef}
         src={post.videoUrl}

@@ -35,8 +35,8 @@ export function GoatgramApp() {
   }, []);
 
   return (
-    <main className="min-h-dvh bg-[var(--app-bg)] px-2 py-2 text-[var(--text-primary)] sm:px-6 sm:py-6">
-      <div className="mx-auto flex min-h-[calc(100dvh-1rem)] w-full max-w-[460px] flex-col overflow-hidden rounded-[2.25rem] border border-[var(--border-soft)] bg-[var(--surface)] shadow-[0_24px_100px_rgba(0,0,0,0.24)] backdrop-blur md:min-h-[900px]">
+    <main className="h-dvh overflow-hidden bg-[var(--app-bg)] px-2 py-2 text-[var(--text-primary)] sm:px-6 sm:py-6">
+      <div className="mx-auto flex h-[calc(100dvh-1rem)] w-full max-w-[460px] flex-col overflow-hidden rounded-[2.25rem] border border-[var(--border-soft)] bg-[var(--surface)] shadow-[0_24px_100px_rgba(0,0,0,0.24)] backdrop-blur sm:h-[calc(100dvh-3rem)] md:h-[900px]">
         <TopBar />
         <StoriesBar stories={mockStories} onSelect={setActiveStoryId} />
         <ReelsFeed posts={mockPosts} onUploadOpen={openUpload} />
