@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --font-sans: var(--font-geist-sans);
+  --font-goatgram: var(--font-goatgram);
+  --app-bg: #f6f6f8;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-strong: #ffffff;
+  --text-primary: #101014;
+  --text-secondary: #3f3f46;
+  --text-muted: #6b7280;
+  --border-soft: rgba(15, 23, 42, 0.08);
+  --story-gradient: linear-gradient(135deg, #833ab4, #fd1d1d 55%, #fcb045);
+  --overlay-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.68) 100%);
+}
+
+.dark {
+  --app-bg: #060608;
+  --surface: rgba(10, 10, 12, 0.82);
+  --surface-strong: #101014;
+  --text-primary: #f8fafc;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --border-soft: rgba(255, 255, 255, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--app-bg);
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at top, rgba(131, 58, 180, 0.12), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(252, 176, 69, 0.12), transparent 30%),
+    var(--app-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.goatgram-logo {
+  background: var(--story-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-goatgram), cursive;
+}
+
+.story-ring {
+  background: var(--story-gradient);
+}
+
+.story-ring-inner {
+  background: var(--surface-strong);
+}
+
+.video-overlay {
+  background: var(--overlay-gradient);
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
