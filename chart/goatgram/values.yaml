@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/bezerker/goatgram
-  tag: latest
+  tag: "adfe7ad"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -41,8 +41,8 @@ tolerations: []
 affinity: {}
 
 hpa:
-  enabled: false
-  minReplicas: 1
+  enabled: true
+  minReplicas: 2
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
 

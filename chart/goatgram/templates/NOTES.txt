@@ -3,21 +3,23 @@ Goatgram deployed!
   Release: {{ .Release.Name }}
   Namespace: {{ .Release.Namespace }}
 
-To access from outside the cluster, create a Cloudflare Tunnel (cloudflared) with
-an ingress rule pointing traffic to the internal service.
+{{- if .Values.ingress.enabled }}
+The Ingress resource is templated by this chart and configured for
+{{ .Values.ingress.className }}.
 
-Add this to your cloudflared config:
+Hosts:
+{{- range .Values.ingress.hosts }}
+  - {{ .host }}
+{{- end }}
 
----
+Ensure DNS records point to your ingress controller's external address.
+{{- else }}
+An Ingress is not enabled. To expose the application, either:
+  - Set ingress.enabled=true and configure ingress hosts, or
+  - Create a Cloudflare Tunnel manually with cloudflared pointing to
+    http://{{ include "goatgram.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+{{- end }}
 
-ingress:
-  - hostname: goatgram.net
-    service: http://goatgram.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
-  - hostname: www.goatgram.net
-    service: http://goatgram.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
-  - service: http_status:404
-
----
-
-Then restart cloudflared and ensure DNS (CNAME) records for goatgram.net and
-www.goatgram.net point to your Cloudflare Tunnel.
+{{- if .Values.hpa.enabled }}
+HPA is enabled (min={{ .Values.hpa.minReplicas }}, max={{ .Values.hpa.maxReplicas }}).
+{{- end }}

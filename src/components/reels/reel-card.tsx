@@ -1,21 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, MessageCircle, Music2, Send, Volume2, VolumeX } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { AlertCircle, Heart, MessageCircle, Music2, Play, Send, Volume2, VolumeX } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import type { Post } from "@/lib/mock-data";
 
 type ReelCardProps = {
   post: Post;
   isActive: boolean;
   isLiked: boolean;
+  preload: "auto" | "metadata" | "none";
   onToggleLike: () => void;
   onUploadOpen: () => void;
 };
 
-export function ReelCard({ post, isActive, isLiked, onToggleLike, onUploadOpen }: ReelCardProps) {
+export function ReelCard({ post, isActive, isLiked, preload, onToggleLike, onUploadOpen }: ReelCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [muted, setMuted] = useState(true);
+  const [needsInteraction, setNeedsInteraction] = useState(false);
+  const [playbackError, setPlaybackError] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  const startPlayback = useCallback(async (force = false) => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    if (prefersReducedMotion && !force) {
+      return;
+    }
+
+    try {
+      await video.play();
+      setNeedsInteraction(false);
+      setPlaybackError(false);
+    } catch {
+      setNeedsInteraction(true);
+    }
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -25,17 +49,20 @@ export function ReelCard({ post, isActive, isLiked, onToggleLike, onUploadOpen }
 
     if (isActive) {
       video.currentTime = 0;
-      void video.play().catch(() => undefined);
-    } else {
-      video.pause();
+      void Promise.resolve().then(() => startPlayback());
+      return;
     }
-  }, [isActive]);
+
+    video.pause();
+  }, [isActive, startPlayback]);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = muted;
     }
   }, [muted]);
+
+  const showOverlay = playbackError || needsInteraction || (prefersReducedMotion && isActive);
 
   return (
     <article className="relative flex h-full min-h-full overflow-hidden bg-black text-white">
@@ -46,10 +73,39 @@ export function ReelCard({ post, isActive, isLiked, onToggleLike, onUploadOpen }
         loop
         muted
         playsInline
-        preload={isActive ? "metadata" : "none"}
+        preload={preload}
+        onError={() => {
+          setPlaybackError(true);
+          setNeedsInteraction(true);
+        }}
+        onLoadedData={() => {
+          setPlaybackError(false);
+          if (isActive && !prefersReducedMotion) {
+            void startPlayback();
+          }
+        }}
       />
 
       <div className="video-overlay absolute inset-0" />
+
+      {showOverlay ? (
+        <button
+          type="button"
+          onClick={() => {
+            const video = videoRef.current;
+            if (!video) {
+              return;
+            }
+
+            video.load();
+            void startPlayback(true);
+          }}
+          className="absolute inset-x-6 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center gap-3 rounded-[1.5rem] bg-black/55 px-5 py-4 text-sm font-semibold text-white backdrop-blur"
+        >
+          {playbackError ? <AlertCircle className="size-5" /> : <Play className="size-5" />}
+          <span>{playbackError ? "Video hiccup. Tap to retry." : prefersReducedMotion ? "Reduced motion on. Tap to play." : "Tap to play reel."}</span>
+        </button>
+      ) : null}
 
       <button
         type="button"

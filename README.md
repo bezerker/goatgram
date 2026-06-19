@@ -23,9 +23,9 @@ App runs on `http://localhost:3000`.
 ## Features
 
 - Vertical reels-style feed
-- Stories rail with fullscreen viewer
+- Stories rail with fullscreen viewer synced to clip duration
 - Light/dark mode toggle
-- Fake baby goat and barn-animal content
+- Real free-use goat and farm-animal clips
 - Upload button opens `BAAAAA`
 - Profile page at `/profile/goatgram`
 
@@ -49,21 +49,14 @@ helm upgrade --install goatgram ./chart/goatgram \
   --namespace goatgram \
   --create-namespace \
   --set image.repository=ghcr.io/bezerker/goatgram \
-  --set image.tag=latest
+  --set image.tag=adfe7ad
 ```
+
 
 ## Cloudflared ingress snippet
 
-Add this to official `cloudflared` Helm values:
-
-```yaml
-ingress:
-  - hostname: goatgram.net
-    service: http://goatgram.goatgram.svc.cluster.local:3000
-  - hostname: www.goatgram.net
-    service: http://goatgram.goatgram.svc.cluster.local:3000
-  - service: http_status:404
-```
+The chart ships a templated Ingress resource (cloudflare-tunnel by default).
+Set `ingress.hosts` in values.yaml; DNS CNAMEs must still point to your tunnel.
 
 ## CI
 

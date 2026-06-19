@@ -1,4 +1,5 @@
 import { mockPosts } from "@/lib/mock-data";
+import { ProfileVideoTile } from "@/components/profile/profile-video-tile";
 import { notFound } from "next/navigation";
 
 type ProfilePageProps = {
@@ -49,26 +50,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {filteredPosts.map((post) => (
-            <article
-              key={post.id}
-              className="group relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)]"
-            >
-              <video
-                className="size-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                src={post.videoUrl}
-                muted
-                playsInline
-                preload="none"
-                poster={`data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 1280'><rect width='100%' height='100%' fill='${post.author.accent}'/></svg>`)}`}
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/45 to-transparent p-4 text-white">
-                <p className="text-sm font-semibold">{post.caption}</p>
-                <div className="mt-2 flex items-center justify-between text-xs text-white/80">
-                  <span>@{post.author.handle}</span>
-                  <span>{post.likesLabel}</span>
-                </div>
-              </div>
-            </article>
+            <ProfileVideoTile key={post.id} post={post} />
           ))}
         </section>
       </div>

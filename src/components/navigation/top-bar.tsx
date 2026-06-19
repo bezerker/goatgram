@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/navigation/theme-toggle";
 
 export function TopBar() {
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[var(--border-soft)] bg-[var(--surface)] px-5 py-4 backdrop-blur">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[var(--border-soft)] bg-[var(--surface)] px-5 pb-4 pt-[calc(env(safe-area-inset-top)+1rem)] backdrop-blur">
       <Link href="/" className="goatgram-logo text-[2rem] leading-none">
         Goatgram
       </Link>

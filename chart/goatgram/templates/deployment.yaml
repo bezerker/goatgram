@@ -6,7 +6,9 @@ metadata:
   labels:
     app: goatgram
 spec:
+  {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: goatgram

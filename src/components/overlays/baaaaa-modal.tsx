@@ -19,11 +19,12 @@ export function BaaaaaModal({ open, onClose }: BaaaaaModalProps) {
       }
     };
 
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [open, onClose]);
